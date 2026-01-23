@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import KnowledgeCard from "./knowledgeCard";
 
 function App() {
-  // 1️⃣ STATE (ALL HOOKS AT TOP)
+  // 1️⃣ STATE
   const [knowledgeItems, setKnowledgeItems] = useState(() => {
     const saved = localStorage.getItem("knowledgeItems");
     return saved
@@ -14,7 +14,8 @@ function App() {
   });
 
   const [title, setTitle] = useState("");
-  const [type, setType] = useState("Video");
+  const [type, setType] = useState("Note");
+  const [url, setUrl] = useState("");
 
   // 2️⃣ EFFECTS
   useEffect(() => {
@@ -24,35 +25,53 @@ function App() {
     );
   }, [knowledgeItems]);
 
-  // 3️⃣ HANDLERS
+  // 3️⃣ LOGIC
+  function detectTypeFromUrl(url) {
+    if (!url) return null;
+    if (url.includes("youtube.com") || url.includes("youtu.be")) {
+      return "Video";
+    }
+    return null;
+  }
+
   function handleAddKnowledge() {
     if (!title.trim()) return;
+
+    const detectedType = detectTypeFromUrl(url);
 
     const newItem = {
       id: Date.now(),
       title,
-      type,
+      type: detectedType ?? type,
+      url,
     };
 
     setKnowledgeItems([...knowledgeItems, newItem]);
     setTitle("");
-    setType("Video");
+    setType("Note");
+    setUrl("");
   }
 
   // 4️⃣ UI
   return (
     <div className="min-h-screen bg-slate-100 p-6">
-      <h1 className="text-2xl font-bold mb-6">
-        Knowledge Vault
-      </h1>
+      <h1 className="text-2xl font-bold mb-6">Knowledge Vault</h1>
 
       <div className="bg-white p-4 rounded-xl shadow-md mb-6">
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-col md:flex-row">
           <input
             type="text"
             placeholder="Enter knowledge title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="flex-1 border border-slate-300 rounded-lg px-3 py-2"
+          />
+
+          <input
+            type="text"
+            placeholder="Optional: paste URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
             className="flex-1 border border-slate-300 rounded-lg px-3 py-2"
           />
 
