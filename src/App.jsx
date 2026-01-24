@@ -12,7 +12,8 @@ function App() {
           { id: 2, title: "System Design Podcast", type: "Podcast" },
         ];
   });
-
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterType, setFilterType] = useState("All");
   const [title, setTitle] = useState("");
   const [type, setType] = useState("Note");
   const [url, setUrl] = useState("");
@@ -51,6 +52,18 @@ function App() {
     setType("Note");
     setUrl("");
   }
+   const filteredKnowledgeItems = knowledgeItems.filter((item) => {
+  const matchesSearch = item.title
+    .toLowerCase()
+    .includes(searchQuery.toLowerCase());
+
+  const matchesType =
+    filterType === "All" || item.type === filterType;
+
+  return matchesSearch && matchesType;
+});
+
+
 
   // 4️⃣ UI
   return (
@@ -94,9 +107,33 @@ function App() {
           </button>
         </div>
       </div>
+        <div className="bg-white p-4 rounded-xl shadow-md mb-6">
+  <div className="flex gap-4 flex-col md:flex-row">
+    <input
+      type="text"
+      placeholder="Search knowledge..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="flex-1 border border-slate-300 rounded-lg px-3 py-2"
+    />
+
+    <select
+      value={filterType}
+      onChange={(e) => setFilterType(e.target.value)}
+      className="border border-slate-300 rounded-lg px-3 py-2"
+    >
+      <option value="All">All</option>
+      <option value="Video">Video</option>
+      <option value="Article">Article</option>
+      <option value="Podcast">Podcast</option>
+      <option value="Note">Note</option>
+    </select>
+  </div>
+</div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {knowledgeItems.map((item) => (
+        {filteredKnowledgeItems.map((item) => (
           <KnowledgeCard
             key={item.id}
             title={item.title}
