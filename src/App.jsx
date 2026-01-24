@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import KnowledgeCard from "./knowledgeCard";
 
-
 function App() {
   // STATE
   const [knowledgeItems, setKnowledgeItems] = useState(() => {
@@ -22,10 +21,7 @@ function App() {
 
   // EFFECTS
   useEffect(() => {
-    localStorage.setItem(
-      "knowledgeItems",
-      JSON.stringify(knowledgeItems)
-    );
+    localStorage.setItem("knowledgeItems", JSON.stringify(knowledgeItems));
   }, [knowledgeItems]);
 
   // LOGIC
@@ -36,13 +32,13 @@ function App() {
     }
     return null;
   }
-function normalizeUrl(url) {
-  if (!url) return "";
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
+  function normalizeUrl(url) {
+    if (!url) return "";
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+    return "https://" + url;
   }
-  return "https://" + url;
-}
 
   function handleAddKnowledge() {
     if (!title.trim()) return;
@@ -50,12 +46,11 @@ function normalizeUrl(url) {
     const detectedType = url ? detectTypeFromUrl(url) : null;
 
     const newItem = {
-  id: Date.now(),
-  title,
-  type: detectedType ?? type,
-  url: normalizeUrl(url),
-};
-
+      id: Date.now(),
+      title,
+      type: detectedType ?? type,
+      url: normalizeUrl(url),
+    };
 
     setKnowledgeItems([...knowledgeItems, newItem]);
     setTitle("");
@@ -69,49 +64,42 @@ function normalizeUrl(url) {
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
 
-    const matchesType =
-      filterType === "All" || item.type === filterType;
+    const matchesType = filterType === "All" || item.type === filterType;
 
     return matchesSearch && matchesType;
   });
-function handleKeyDown(e) {
-  if (e.key === "Enter") {
-    handleAddKnowledge();
+  function handleKeyDown(e) {
+    if (e.key === "Enter") {
+      handleAddKnowledge();
+    }
   }
-}
 
   // UI
   return (
     <div className="min-h-screen bg-slate-100 p-6">
-      <h1 className="text-3xl font-bold mb-2">
-        Knowledge Vault
-      </h1>
-      <p className="text-slate-600 mb-6">
-        Your personal knowledge vault
-      </p>
+      <h1 className="text-3xl font-bold mb-2">Knowledge Vault</h1>
+      <p className="text-slate-600 mb-6">Your personal knowledge vault</p>
 
       {/* ADD KNOWLEDGE */}
       <div className="bg-white p-4 rounded-xl shadow-md mb-6">
         <div className="flex gap-4 flex-col md:flex-row">
           <input
-  type="text"
-  placeholder="Enter knowledge title"
-  value={title}
-  onChange={(e) => setTitle(e.target.value)}
-  onKeyDown={handleKeyDown}
-  className="flex-1 border border-slate-300 rounded-lg px-3 py-2"
-/>
+            type="text"
+            placeholder="Enter knowledge title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="flex-1 border border-slate-300 rounded-lg px-3 py-2"
+          />
 
-
-<input
-  type="text"
-  placeholder="Optional: paste URL"
-  value={url}
-  onChange={(e) => setUrl(e.target.value)}
-  onKeyDown={handleKeyDown}
-  className="flex-1 border border-slate-300 rounded-lg px-3 py-2"
-/>
-
+          <input
+            type="text"
+            placeholder="Optional: paste URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="flex-1 border border-slate-300 rounded-lg px-3 py-2"
+          />
 
           <select
             value={type}
@@ -161,9 +149,7 @@ function handleKeyDown(e) {
       {/* GRID / EMPTY STATE */}
       {filteredKnowledgeItems.length === 0 ? (
         <div className="text-center text-slate-500 mt-12">
-          <p className="text-lg font-medium">
-            No knowledge found
-          </p>
+          <p className="text-lg font-medium">No knowledge found</p>
           <p className="text-sm mt-1">
             Try adjusting your search or add new knowledge.
           </p>
