@@ -19,14 +19,25 @@ app.get("/", (req, res) => {
 });
 
 // Test POST endpoint
-app.post("/test", (req, res) => {
-  const data = req.body;
+app.post("/summarize", (req, res) => {
+  const { title, url, type } = req.body;
 
-  res.json({
-    message: "Data received successfully",
-    receivedData: data,
-  });
+  // Mocked summary response
+  const response = {
+    summary: [
+      `This is a summary for "${title}"`,
+      `Content type detected as ${type}`,
+      "Main concepts are explained clearly",
+    ],
+    keyTakeaways: [
+      "Summaries save time",
+      "Structured knowledge improves recall",
+    ],
+  };
+
+  res.json(response);
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

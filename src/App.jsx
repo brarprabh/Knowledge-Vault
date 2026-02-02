@@ -73,20 +73,21 @@ function App() {
       handleAddKnowledge();
     }
   }
-  async function testBackendConnection() {
-    const response = await fetch("http://localhost:5000/test", {
+  async function testSummarizeApi() {
+    const response = await fetch("http://localhost:5000/summarize", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: "Test from frontend",
-        type: "Note",
+        title: "React Hooks Explained",
+        url: "https://youtube.com/test",
+        type: "Video",
       }),
     });
 
     const data = await response.json();
-    console.log("Backend response:", data);
+    console.log("Summary response:", data);
   }
 
   // UI
@@ -179,10 +180,10 @@ function App() {
         </div>
       )}
       <button
-        onClick={testBackendConnection}
-        className="bg-green-600 text-white px-4 py-2 rounded-lg mb-6"
+        onClick={testSummarizeApi}
+        className="bg-purple-600 text-white px-4 py-2 rounded-lg mb-6"
       >
-        Test Backend Connection
+        Test Summarize API
       </button>
     </div>
   );
