@@ -73,13 +73,27 @@ function App() {
       handleAddKnowledge();
     }
   }
+  async function testBackendConnection() {
+    const response = await fetch("http://localhost:5000/test", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: "Test from frontend",
+        type: "Note",
+      }),
+    });
+
+    const data = await response.json();
+    console.log("Backend response:", data);
+  }
 
   // UI
   return (
     <div className="min-h-screen bg-slate-100 p-6">
       <h1 className="text-3xl font-bold mb-2">Knowledge Vault</h1>
       <p className="text-slate-600 mb-6">Your personal knowledge vault</p>
-
       {/* ADD KNOWLEDGE */}
       <div className="bg-white p-4 rounded-xl shadow-md mb-6">
         <div className="flex gap-4 flex-col md:flex-row">
@@ -120,7 +134,6 @@ function App() {
           </button>
         </div>
       </div>
-
       {/* SEARCH & FILTER */}
       <div className="bg-white p-4 rounded-xl shadow-md mb-6">
         <div className="flex gap-4 flex-col md:flex-row">
@@ -145,7 +158,6 @@ function App() {
           </select>
         </div>
       </div>
-
       {/* GRID / EMPTY STATE */}
       {filteredKnowledgeItems.length === 0 ? (
         <div className="text-center text-slate-500 mt-12">
@@ -166,6 +178,12 @@ function App() {
           ))}
         </div>
       )}
+      <button
+        onClick={testBackendConnection}
+        className="bg-green-600 text-white px-4 py-2 rounded-lg mb-6"
+      >
+        Test Backend Connection
+      </button>
     </div>
   );
 }
